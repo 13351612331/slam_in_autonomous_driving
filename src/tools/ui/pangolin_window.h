@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 
+#include "common/nav_state.h"
 #include "pangolin_window_impl.h"
 
 namespace sad::ui {
@@ -25,8 +26,14 @@ public:
    */
   bool Init();
 
+  // 更新kalman滤波器状态
+  void UpdateNavState(const NavStated &state);
+
   // 等待显示线程退出，并释放资源
   void Quit();
+
+  // 用户是否已经退出UI
+  bool ShouldQuit();
 
 private:
   std::shared_ptr<PangolinWindowImpl> impl_ = nullptr;

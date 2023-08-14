@@ -16,8 +16,13 @@ using Vec2i = Eigen::Vector2i;
 using Vec3d = Eigen::Vector3d;
 using Vec3f = Eigen::Vector3f;
 using Vec4f = Eigen::Vector4f;
+
+using Quatd = Eigen::Quaterniond;
+using Quatf = Eigen::Quaternionf;
+
 using SE3 = Sophus::SE3d;
 using SE3f = Sophus::SE3f;
+using SO3 = Sophus::SO3d;
 namespace sad {
 // 矢量比较
 template <int N> struct less_vec {

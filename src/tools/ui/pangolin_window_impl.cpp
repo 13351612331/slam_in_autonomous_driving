@@ -1,6 +1,7 @@
 //
 // Created by kangyu on 2023/8/11.
 //
+
 #include "pangolin_window_impl.h"
 
 namespace sad::ui {
@@ -11,6 +12,7 @@ bool PangolinWindowImpl::DeInit() {
   ReleaseBuffer();
   return true;
 }
+
 void PangolinWindowImpl::ReleaseBuffer() {}
 bool PangolinWindowImpl::Init() {
   // Create a window and bind ite context to the main thread
@@ -45,10 +47,11 @@ bool PangolinWindowImpl::Init() {
 }
 
 void PangolinWindowImpl::AllocateBuffer() {
-  std::string global_text("Welcome to SAD.UI");
+  std::string global_text("Welcome to SAD.UI KangYu");
   auto &font = pangolin::default_font();
   gltext_label_global_ = font.Text(global_text);
 }
+
 void PangolinWindowImpl::Render() {
   // fetch the context and bind it to this thread
   pangolin::BindToContext(win_name_);
@@ -103,13 +106,16 @@ void PangolinWindowImpl::Render() {
   // unset the current context from the main thread
   pangolin::GetBoundWindow()->RemoveCurrent();
 }
+
 void PangolinWindowImpl::CreateDisplayLayout() {
   // define camera render object (for view / scene browsing)
   auto proj_mat_main = pangolin::ProjectionMatrix(
-      win_width_, win_height_, cam_focus_, cam_focus_, win_width_ / 2,
+      win_width_, win_width_, cam_focus_, cam_focus_, win_width_ / 2,
       win_width_ / 2, cam_z_near_, cam_z_far_);
+
   auto model_view_main =
       pangolin::ModelViewLookAt(0, 0, 1000, 0, 0, 0, pangolin::AxisY);
+
   s_cam_main_ = pangolin::OpenGlRenderState(std::move(proj_mat_main),
                                             std::move(model_view_main));
 
@@ -163,6 +169,7 @@ void PangolinWindowImpl::CreateDisplayLayout() {
       .AddDisplay(d_cam3d)
       .AddDisplay(d_plot);
 }
+
 void PangolinWindowImpl::RenderClouds() {
   // 更新各种推送过来的状态
   UpdateGlobalMap();

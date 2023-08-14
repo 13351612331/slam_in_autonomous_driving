@@ -33,4 +33,15 @@ bool PangolinWindow::Init() {
   }
   return inited;
 }
+bool PangolinWindow::ShouldQuit() { return pangolin::ShouldQuit(); }
+void PangolinWindow::UpdateNavState(const NavStated &state) {
+  std::unique_lock<std::mutex> lock_lio_res(impl_->mtx_nav_state_);
+
+  impl_->pose_ = SE3(state.R_, state.p_);
+  impl_->vel_ = state.v_;
+  impl_->bias_acc_ = state.ba_;
+  impl_->bias_gyr_ = state.bg_;
+
+  impl_->kf_result_need_update_.store(true);
+}
 } // namespace sad::ui
