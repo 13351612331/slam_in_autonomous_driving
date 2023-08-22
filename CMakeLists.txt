@@ -27,4 +27,6 @@ list(APPEND ALL_LIBS ${Pangolin_LIBRARIES})
 list(APPEND ALL_LIBS ${gflags_LIBRARIES})
 list(APPEND ALL_LIBS tbb)
 
+file(GLOB_RECURSE COMMON_SRCS common/*.cpp)
+
 add_subdirectory(src)
