@@ -17,7 +17,9 @@ include_directories(${Pangolin_INCLUDE_DIRS})
 
 find_package(gflags REQUIRED)
 
-include_directories(thirdParty/sophus)
+include_directories(thirdParty/sophus
+        thirdParty/utm_convert
+)
 
 message("=================================")
 message(${Pangolin_LIBRARIES})
@@ -27,6 +29,6 @@ list(APPEND ALL_LIBS ${Pangolin_LIBRARIES})
 list(APPEND ALL_LIBS ${gflags_LIBRARIES})
 list(APPEND ALL_LIBS tbb)
 
-file(GLOB_RECURSE COMMON_SRCS common/*.cpp)
+file(GLOB_RECURSE COMMON_SRCS common/*.cpp thirdParty/utm_convert/*.cc)
 
 add_subdirectory(src)

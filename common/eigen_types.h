@@ -13,6 +13,7 @@
 #include "sophus/se3.hpp"
 
 using Vec2i = Eigen::Vector2i;
+using Vec2d = Eigen::Vector2d;
 using Vec3d = Eigen::Vector3d;
 using Vec3f = Eigen::Vector3f;
 using Vec4f = Eigen::Vector4f;

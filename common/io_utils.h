@@ -6,6 +6,7 @@
 #define SLAM_IN_AUTONOMOUS_DRIVING_IO_UTILS_H
 
 #include "common/eigen_types.h"
+#include "common/gnss.h"
 #include "common/imu.h"
 #include <fstream>
 #include <functional>
@@ -22,9 +23,15 @@ public:
 
   // 定义回调函数
   using IMUProcessFuncType = std::function<void(const IMU &)>;
+  using GNSSProcessFuncType = std::function<void(const GNSS &)>;
 
   TxtIO &SetIMUProcessFunc(IMUProcessFuncType imu_proc) {
     imu_proc_ = std::move(imu_proc);
+    return *this;
+  }
+
+  TxtIO &SetGNSSProcessFunc(GNSSProcessFuncType gnss_proc) {
+    gnss_proc_ = gnss_proc;
     return *this;
   }
 
@@ -34,6 +41,7 @@ public:
 private:
   std::ifstream fin;
   IMUProcessFuncType imu_proc_;
+  GNSSProcessFuncType gnss_proc_;
 };
 } // namespace sad
 
