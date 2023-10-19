@@ -17,6 +17,9 @@ using Vec2d = Eigen::Vector2d;
 using Vec3d = Eigen::Vector3d;
 using Vec3f = Eigen::Vector3f;
 using Vec4f = Eigen::Vector4f;
+using Vec6d = Eigen::Matrix<double, 6, 1>;
+
+using Mat6d = Eigen::Matrix<double, 6, 6>;
 
 using Quatd = Eigen::Quaterniond;
 using Quatf = Eigen::Quaternionf;
