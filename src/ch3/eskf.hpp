@@ -237,7 +237,32 @@ template <typename S> bool ESKF<S>::Predict(const sad::IMU &imu) {
 }
 
 template <typename S> bool ESKF<S>::ObserveWheelSpeed(const sad::Odom &odom) {
-  // TODO
+  assert(odom.timestamp_ >= current_time_);
+  // odom 修正以及雅可比
+  // 使用三维的轮速观测，H为3x18，大部分为零
+  Eigen::Matrix<S, 3, 18> H = Eigen::Matrix<S, 3, 18>::Zero();
+  H.template block<3, 3>(0, 3) = Mat3T::Identity();
+
+  // 卡尔曼增益
+  Eigen::Matrix<S, 18, 3> K =
+      cov_ * H.transpose() * (H * cov_ * H.transpose() + odom_noise_).inverse();
+
+  // velocity obs
+  double velo_l = options_.wheel_radius_ * odom.left_pulse_ /
+                  options_.circle_pulse_ * 2 * M_PI / options_.odom_span_;
+  double velo_r = options_.wheel_radius_ * odom.right_pulse_ /
+                  options_.circle_pulse_ * 2 * M_PI / options_.odom_span_;
+  double average_vel = 0.5 * (velo_l + velo_r);
+
+  VecT vel_odom(average_vel, 0.0, 0.0);
+  VecT vel_world = R_ * vel_odom;
+
+  dx_ = K * (vel_world - v_);
+
+  // update cov
+  cov_ = (Mat18T::Identity() - K * H) * cov_;
+
+  UpdateAndReset();
   return true;
 }
 

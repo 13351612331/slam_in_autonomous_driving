@@ -86,7 +86,6 @@ int main(int argc, char **argv) {
         imu_inited = true;
         return;
       }
-
       if (!gnss_inited) {
         // 等待有效的RTK数据
         return;
