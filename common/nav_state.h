@@ -31,6 +31,9 @@ template <typename T> struct NavState {
   NavState(double time, const SE3 &pose, const Vec3 &vel = Vec3::Zero())
       : timestamp_(time), R_(pose.so3()), p_(pose.translation()), v_(vel) {}
 
+  // 转换到Sophus
+  Sophus::SE3<T> GetSE3() const { return SE3(R_, p_); }
+
   double timestamp_ = 0;   // 时间
   SO3 R_;                  // 旋转
   Vec3 p_ = Vec3::Zero();  // 平移

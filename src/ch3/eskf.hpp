@@ -10,6 +10,7 @@
 #include "common/imu.h"
 #include "common/math_utils.h"
 #include "common/nav_state.h"
+#include "common/odom.h"
 
 namespace sad {
 /**
@@ -106,6 +107,9 @@ public:
   NavStateT GetNominalState() const {
     return NavStateT(current_time_, R_, p_, v_, bg_, ba_);
   }
+
+  // 获取重力
+  Vec3d GetGravity() const { return g_; }
 
 private:
   void BuildNoise(const Options &options) {

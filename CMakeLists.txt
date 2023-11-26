@@ -16,6 +16,7 @@ find_package(Pangolin 0.8 REQUIRED)
 include_directories(${Pangolin_INCLUDE_DIRS})
 
 find_package(gflags REQUIRED)
+find_package(glog REQUIRED)
 
 include_directories(thirdParty/sophus
         thirdParty/utm_convert
@@ -27,6 +28,7 @@ message(${Pangolin_LIBRARIES})
 list(APPEND ALL_LIBS ${PCL_LIBRARY_DIRS})
 list(APPEND ALL_LIBS ${Pangolin_LIBRARIES})
 list(APPEND ALL_LIBS ${gflags_LIBRARIES})
+list(APPEND ALL_LIBS glog::glog)
 list(APPEND ALL_LIBS tbb)
 
 file(GLOB_RECURSE COMMON_SRCS common/*.cpp thirdParty/utm_convert/*.cc)
