@@ -20,6 +20,7 @@ find_package(glog REQUIRED)
 
 include_directories(thirdParty/sophus
         thirdParty/utm_convert
+        thirdParty/g2o
 )
 
 message("=================================")

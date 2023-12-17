@@ -12,6 +12,7 @@
 #include <g2o/core/g2o_core_api.h>
 
 #include "eigen_types.h"
+#include "nav_state.h"
 
 namespace sad {
 /**
@@ -206,6 +207,57 @@ public:
     linearizeOplus();
     return _jacobianOplusXi.transpose() * information() * _jacobianOplusXi;
   }
+
+  virtual bool read(std::istream &is) { return true; }
+  virtual bool write(std::ostream &os) const { return true; }
+};
+
+/**
+ * 对上一帧IMU pvq bias的先验
+ * info 由外部指定，通过时间窗口边缘化给出
+ *
+ * 顶点顺序：pose,v,bg,ba
+ * 残差顺序：R,p,v,bg,ba,15维
+ */
+class EdgePriorPoseNavState : public g2o::BaseMultiEdge<15, Vec15d> {
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  EdgePriorPoseNavState(const NavStated &state, const Mat15d &info);
+
+  virtual bool read(std::istream &is) { return false; }
+  virtual bool write(std::ostream &os) const { return false; }
+
+  void computeError();
+  virtual void linearizeOplus();
+
+  NavStated state_;
+};
+
+/**
+ * 3维 轮速计观测边
+ * 轮速观测世界速度在自车坐标系下矢量，3维情况下假设自车不会有y和z方向速度
+ */
+class EdgeEncoder3D : public g2o::BaseUnaryEdge<3, Vec3d, VertexVelocity> {
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+  EdgeEncoder3D() = default;
+
+  /**
+   * 构造函数需要知道世界系下速度
+   * @param v0
+   * @param speed
+   */
+  EdgeEncoder3D(VertexVelocity *v0, const Vec3d &speed) {
+    setVertex(0, v0);
+    setMeasurement(speed);
+  }
+
+  void computeError() override {
+    VertexVelocity *v0 = (VertexVelocity *)_vertices[0];
+    _error = v0->estimate() - _measurement;
+  }
+
+  void linearizeOplus() override { _jacobianOplusXi.setIdentity(); }
 
   virtual bool read(std::istream &is) { return true; }
   virtual bool write(std::ostream &os) const { return true; }
