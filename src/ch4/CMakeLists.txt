@@ -12,7 +12,11 @@ file(GLOB g2o_LIBS ../../thirdParty/g2o/lib/*.so)
 find_package(GTest REQUIRED)
 message(${GTEST_LIBRARIES})
 
-add_library(COMMON_LIBS SHARED ${COMMON_SRCS})
+get_filename_component(full_path_test_cpp ${CMAKE_CURRENT_SOURCE_DIR}/../../common/point_cloud_utils.cpp ABSOLUTE)
+
+#add_library(COMMON_LIBS SHARED ${COMMON_SRCS})
+LIST(REMOVE_ITEM COMMON_SRCS "${full_path_test_cpp}")
+
 
 add_executable(test_preintegraion test_preintegration.cpp ${UI_SRCS} ${COMMON_SRCS} ${CH4_SRCS} ${CH3_SRCS})
 target_link_libraries(test_preintegraion ${GTEST_LIBRARIES} ${ALL_LIBS} ${g2o_LIBS})
