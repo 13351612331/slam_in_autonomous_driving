@@ -37,11 +37,11 @@ void bfnn_cloud(CloudPtr cloud1, CloudPtr cloud2,
   std::vector<size_t> index(cloud2->size());
   std::for_each(index.begin(), index.end(),
                 [idx = 0](size_t &i) mutable { i = idx++; });
-  
+
   matches.resize(index.size());
   std::for_each(std::execution::seq, index.begin(), index.end(), [&](auto idx) {
     matches[idx].second = idx;
-    std::cout << "bfnn cloud begin 4 " << idx << std::endl;
+    // std::cout << "bfnn cloud begin 4 " << idx << std::endl;
     matches[idx].first = bfnn_point(cloud1, ToVec3f(cloud2->points[idx]));
   });
 }

@@ -13,6 +13,9 @@ namespace sad::math {
 // 常量定义
 constexpr double kDEG2RAD = M_PI / 180.0; // deg->rad
 
+// 非法定义
+constexpr size_t kINVALID_ID = std::numeric_limits<size_t>::max();
+
 /**
  * 计算一个容器内数据的均值与对角形式协方差
  * @tparam C 容器类型
