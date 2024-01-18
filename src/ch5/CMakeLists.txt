@@ -8,7 +8,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 find_package(GTest REQUIRED)
 
-list(APPEND CH5_SRCS bfnn.cpp)
+list(APPEND CH5_SRCS bfnn.cpp kdtree.cpp)
 
 file(GLOB g2o_LIBS ../../thirdParty/g2o/lib/*.so)
 list(APPEND ALL_LIBS "${g2o_LIBS}")
