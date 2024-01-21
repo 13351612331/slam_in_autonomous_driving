@@ -14,14 +14,17 @@
 #include "common/point_cloud_utils.h"
 #include "common/sys_utils.h"
 #include "kdtree.h"
+#include "octo_tree.h"
 
 #define BFNN_TEST 0
 #define GRID_NN_TEST 0
 #define KDTREE_BASICS 0
+#define KDTREE_KNN 0
+#define OCTREE_BASICS 0
 
 DEFINE_string(first_scan_path, "./data/ch5/first.pcd", "第一个点云路径");
 DEFINE_string(second_scan_path, "./data/ch5/second.pcd", "第二个点云路径");
-DEFINE_double(ANN_alpha, 0.1, "ANN的比例因子");
+DEFINE_double(ANN_alpha, 1.0, "ANN的比例因子");
 
 #if BFNN_TEST
 TEST(CH5_TEST, BFNN) {
@@ -234,6 +237,7 @@ TEST(CH5_TEST, KDTREE_BASICS) {
 }
 #endif
 
+#if KDTREE_KNN
 TEST(CH5_TEST, KDTREE_KNN) {
   sad::CloudPtr first(new sad::PointCloudType), second(new sad::PointCloudType);
   pcl::io::loadPCDFile(FLAGS_first_scan_path, *first);
@@ -302,6 +306,82 @@ TEST(CH5_TEST, KDTREE_KNN) {
 
   LOG(INFO) << "done.";
 
+  SUCCEED();
+}
+#endif
+
+#ifdef OCTREE_BASICS
+TEST(CH5_TEST, OCTREE_BASICS) {
+  sad::CloudPtr cloud(new sad::PointCloudType);
+  sad::PointType p1, p2, p3, p4;
+  p1.x = 0;
+  p1.y = 0;
+  p1.z = 0;
+
+  p2.x = 1;
+  p2.y = 0;
+  p2.z = 0;
+
+  p3.x = 0;
+  p3.y = 1;
+  p3.z = 0;
+
+  p4.x = 1;
+  p4.y = 1;
+  p4.z = 0;
+
+  cloud->points.push_back(p1);
+  cloud->points.push_back(p2);
+  cloud->points.push_back(p3);
+  cloud->points.push_back(p4);
+
+  sad::OctoTree octree;
+  octree.BuildTree(cloud);
+  octree.SetApproximate(false);
+  LOG(INFO) << "Octo tree leaves: " << octree.size()
+            << ", points: " << cloud->size();
+
+  SUCCEED();
+}
+#endif
+
+TEST(CH5_TEST, OCTREE_KNN) {
+  sad::CloudPtr first(new sad::PointCloudType), second(new sad::PointCloudType);
+  pcl::io::loadPCDFile(FLAGS_first_scan_path, *first);
+  pcl::io::loadPCDFile(FLAGS_second_scan_path, *second);
+
+  if (first->empty() || second->empty()) {
+    LOG(ERROR) << "cannot load cloud";
+    FAIL();
+  }
+
+  // voxel grid 至0.5
+  sad::VoxelGrid(first);
+  sad::VoxelGrid(second);
+
+  sad::OctoTree octree;
+  sad::evaluate_and_call([&first, &octree]() { octree.BuildTree(first); },
+                         "Octo Tree build", 1);
+
+  octree.SetApproximate(true, FLAGS_ANN_alpha);
+  LOG(INFO) << "Octo tree leaves: " << octree.size()
+            << ", points: " << first->size();
+
+  // 测试KNN
+  LOG(INFO) << "testing knn";
+  std::vector<std::pair<size_t, size_t>> matches;
+  sad::evaluate_and_call(
+      [&first, &second, &octree, &matches]() {
+        octree.GetClosestPointMT(second, matches, 5);
+      },
+      "Octo Tree 5NN 多线程", 1);
+  LOG(INFO) << "comparing with bfnn";
+  // 比较真值
+  std::vector<std::pair<size_t, size_t>> true_matches;
+  sad::bfnn_cloud_mt_k(first, second, true_matches);
+  EvaluateMatches(true_matches, matches);
+
+  LOG(INFO) << "done.";
   SUCCEED();
 }
 
