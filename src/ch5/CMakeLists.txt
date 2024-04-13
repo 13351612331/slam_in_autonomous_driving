@@ -25,3 +25,6 @@ target_link_libraries(scan_to_range_image ${ALL_LIBS} ${PCL_LIBRARIES} ${OpenCV_
 
 add_executable(test_nn test_nn.cpp ${CH5_SRCS} ${COMMON_SRCS})
 target_link_libraries(test_nn ${ALL_LIBS} ${GTEST_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBS})
+
+add_executable(linear_fitting linear_fitting.cpp ${CH5_SRCS} ${COMMON_SRCS})
+target_link_libraries(linear_fitting ${ALL_LIBS} ${GTEST_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBS})

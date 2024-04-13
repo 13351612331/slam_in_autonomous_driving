@@ -18,6 +18,7 @@ using Vec2f = Eigen::Vector2f;
 using Vec3d = Eigen::Vector3d;
 using Vec3f = Eigen::Vector3f;
 using Vec4f = Eigen::Vector4f;
+using Vec4d = Eigen::Vector4d;
 using Vec6d = Eigen::Matrix<double, 6, 1>;
 using Vec9d = Eigen::Matrix<double, 9, 1>;
 using Vec15d = Eigen::Matrix<double, 15, 1>;
