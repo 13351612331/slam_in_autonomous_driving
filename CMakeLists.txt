@@ -17,6 +17,16 @@ include_directories(${Pangolin_INCLUDE_DIRS})
 
 find_package(gflags REQUIRED)
 find_package(glog REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+        roscpp
+        rospy
+        rosbag
+        std_msgs
+        sensor_msgs
+        pcl_ros
+        pcl_conversions
+)
+include_directories(${catkin_INCLUDE_DIRS})
 
 include_directories(thirdParty/sophus
         thirdParty/utm_convert
@@ -26,9 +36,13 @@ include_directories(thirdParty/sophus
 message("=================================")
 message(${Pangolin_LIBRARIES})
 
+file(GLOB g2o_LIBS ./thirdParty/g2o/lib/*.so)
+list(APPEND ALL_LIBS "${g2o_LIBS}")
+
 list(APPEND ALL_LIBS ${PCL_LIBRARY_DIRS})
 list(APPEND ALL_LIBS ${Pangolin_LIBRARIES})
 list(APPEND ALL_LIBS ${gflags_LIBRARIES})
+list(APPEND ALL_LIBS ${catkin_LIBRARIES})
 list(APPEND ALL_LIBS glog::glog)
 list(APPEND ALL_LIBS tbb)
 

@@ -47,4 +47,30 @@ void TxtIO::Go() {
   }
   std::cout << "done." << std::endl;
 }
+
+void RosbagIO::Go() {
+  rosbag::Bag bag(bag_file_);
+  LOG(INFO) << "running in " << bag_file_
+            << ", reg process func: " << process_func_.size();
+
+  if (!bag.isOpen()) {
+    LOG(ERROR) << "can not open " << bag_file_;
+    return;
+  }
+
+  auto view = rosbag::View(bag);
+  for (const rosbag::MessageInstance &m : view) {
+    auto iter = process_func_.find(m.getTopic());
+    if (iter != process_func_.end()) {
+      iter->second(m);
+    }
+
+    if (global::FLAG_EXIT) {
+      break;
+    }
+  }
+
+  bag.close();
+  LOG(INFO) << "bag " << bag_file_ << " finished.";
+}
 } // namespace sad

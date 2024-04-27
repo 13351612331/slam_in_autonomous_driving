@@ -10,10 +10,6 @@ find_package(GTest REQUIRED)
 
 list(APPEND CH5_SRCS bfnn.cpp kdtree.cpp octo_tree.cpp)
 
-file(GLOB g2o_LIBS ../../thirdParty/g2o/lib/*.so)
-list(APPEND ALL_LIBS "${g2o_LIBS}")
-
-
 add_executable(point_cloud_load_and_vis point_cloud_load_and_vis.cpp)
 target_link_libraries(point_cloud_load_and_vis ${ALL_LIBS} ${PCL_LIBRARIES})
 

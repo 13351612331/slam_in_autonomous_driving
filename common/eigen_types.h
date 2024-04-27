@@ -13,6 +13,8 @@
 #include "sophus/se3.hpp"
 
 using Vec2i = Eigen::Vector2i;
+using Vec3b = Eigen::Matrix<char, 3, 1>;
+
 using Vec2d = Eigen::Vector2d;
 using Vec2f = Eigen::Vector2f;
 using Vec3d = Eigen::Vector3d;
@@ -31,6 +33,7 @@ using Mat15d = Eigen::Matrix<double, 15, 15>;
 using Quatd = Eigen::Quaterniond;
 using Quatf = Eigen::Quaternionf;
 
+using SE2 = Sophus::SE2d;
 using SE3 = Sophus::SE3d;
 using SE3f = Sophus::SE3f;
 using SO3 = Sophus::SO3d;
