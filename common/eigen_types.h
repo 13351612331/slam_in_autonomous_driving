@@ -29,6 +29,7 @@ using Mat3d = Eigen::Matrix3d;
 using Mat6d = Eigen::Matrix<double, 6, 6>;
 using Mat9d = Eigen::Matrix<double, 9, 9>;
 using Mat15d = Eigen::Matrix<double, 15, 15>;
+using Mat32d = Eigen::Matrix<double, 3, 2>;
 
 using Quatd = Eigen::Quaterniond;
 using Quatf = Eigen::Quaternionf;
@@ -37,6 +38,7 @@ using SE2 = Sophus::SE2d;
 using SE3 = Sophus::SE3d;
 using SE3f = Sophus::SE3f;
 using SO3 = Sophus::SO3d;
+using SO2 = Sophus::SO2d;
 namespace sad {
 // 矢量比较
 template <int N> struct less_vec {
