@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
                          if (fLS::FLAGS_method == "point2point") {
                            icp.AlignGaussNewton(pose);
                          } else if (fLS::FLAGS_method == "point2plane") {
-                           std::cout << "no function" << std::endl;
+                           icp.AlignGaussNewtonPoint2Plane(pose);
                          }
 
                          cv::Mat image;

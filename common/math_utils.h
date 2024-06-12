@@ -100,6 +100,24 @@ bool FitLine(std::vector<Eigen::Matrix<S, 3, 1>> &data,
 
   return true;
 }
+
+template <typename S>
+bool FitLine2D(const std::vector<Eigen::Matrix<S, 2, 1>> &data,
+               Eigen::Matrix<S, 3, 1> &coeffs) {
+  if (data.size() < 2) {
+    return false;
+  }
+
+  Eigen::MatrixXd A(data.size(), 3);
+  for (int i = 0; i < data.size(); ++i) {
+    A.row(i).head<2>() = data[i].transpose();
+    A.row(i)[2] = 1.0;
+  }
+
+  Eigen::JacobiSVD svd(A, Eigen::ComputeThinV);
+  coeffs = svd.matrixV().col(2);
+  return true;
+}
 } // namespace sad::math
 
 #endif // SLAM_IN_AUTONOMOUS_DRIVING_MATH_UTILS_H
